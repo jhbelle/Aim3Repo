@@ -10,13 +10,16 @@
 library(stringr)
 library(ncdf4)
 
+# Source function file for NLDAS
+source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
+
 # ------
 # Define variables
 # ------
 
 # Loop start/end dates
 Startdate = as.Date("2003-01-01", "%Y-%m-%d")
-Enddate = as.Date("2005-12-31", "%Y-%m-%d")
+Enddate = as.Date("2003-01-02", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)
@@ -29,10 +32,10 @@ ATflag = "A"
 h04v04 = read.csv("/home/jhbelle/Data/FinGrid/Comp_H04v04.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLenP", "MEAN", "MEAN_1", "MEAN_12", "Sum_RdLeng", "Lonchar", "Latchar")]
 colnames(h04v04) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
 h04v05 = read.csv("/home/jhbelle/Data/FinGrid/Comp_H04v05.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLen", "MEAN", "MEAN_1", "MEAN_12", "Sum_LocRdL", "Lonchar", "Latchar")]
-colnames(h04v04) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
+colnames(h04v05) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
 MAIACPixels = rbind.data.frame(h04v04, h04v05)
-MAIACPixels$NLDASLon = round(MAIACPixels$NLDASLon, digits=3)
-MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
+#MAIACPixels$NLDASLon = round(MAIACPixels$NLDASLon, digits=3)
+#MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
 
 # Location of MAIAC data outputs
 MAIACLocs <- c("/gc_runs/h04v04maiacout_Aqua/", "/gc_runs/h04v05maiacout_Aqua/")
@@ -130,6 +133,7 @@ for (day in seq_along(SeqDates)){
     }
     # Remove days MAIAC file
     rm(MAIAC, ListMdat, MAIACpart, CloudMAIACClean, CPclean, CEclean, CFclean, CPCEclean, CPCECFclean, MAIACpixelsMAIAC)
+    str(MAIACCloud)
     # Pull NLDAS values for each pixel/overpass
     NearestHour = round(MAIACCloud[1,"Timestamp"])
     # ForA file
@@ -139,18 +143,19 @@ for (day in seq_along(SeqDates)){
     for (var in ForAvars){
       varval = GetField(NLDASForA, latvec=Lat, lonvec = Lon, varname = var)
       colnames(varval) <- c("Long", "Lat", var)
-      varval$Lat = as.numeric(varval$Lat)
-      varval$Long = as.numeric(varval$Long)
+      varval$Lat = as.numeric(as.character(varval$Lat))
+      varval$Long = as.numeric(as.character(varval$Long))
+      str(varval)
       MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"))
     }
-    NLDASForB = nc_Open(sprintf("%s/File_B/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
+    NLDASForB = nc_open(sprintf("%s/File_B/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
     Lat = ncvar_get(NLDASForB, "lat")
     Lon = ncvar_get(NLDASForB, "lon")
     for (var in ForBvars){
-      varval = GetField(NLDASFOrB, latvec=Lat, lonvec=Lon, varname=var)
+      varval = GetField(NLDASForB, latvec=Lat, lonvec=Lon, varname=var)
       colnames(varval) <- c("Long", "Lat", var)
-      varval$Lat = as.numeric(varval$Lat)
-      varval$Long = as.numeric(varval$Long)
+      varval$Lat = as.numeric(as.character(varval$Lat))
+      varval$Long = as.numeric(as.character(varval$Long))
       MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"))
     }
     # Pull GC values for each pixel/overpass

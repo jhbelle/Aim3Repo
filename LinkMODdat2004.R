@@ -17,14 +17,14 @@ source("/home/jhbelle/Aim3Repo/Functions_LinkMODdat_Grid.r")
 #args = commandArgs(trailingOnly=T)
 #Endday = as.numeric(args[2])
 #Startday = as.numeric(args[1])
-Endday=365
-Startday=170
+Endday=366
+Startday=10
 ## Year
-Year = 2003
+Year = 2004
 TAflag="A"
 ListBroken = c()
 ## Location of MODIS files - extracted from hdf section-specific csvs using GriddingExtractMODIS10km.m
-MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MYD06_Extr/2003/"
+MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MYD06_Extr/2004/"
 ## Location of grid
 GridPath = "/gc_runs/Gridded_GA_MYD06_5km/"
 ## Location of output files
