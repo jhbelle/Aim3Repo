@@ -18,7 +18,7 @@ source("/home/jhbelle/Aim3Repo/Functions_LinkMODdat_Grid.r")
 #Endday = as.numeric(args[2])
 #Startday = as.numeric(args[1])
 Endday=366
-Startday=271
+Startday=335
 ## Year
 Year = 2005
 TAflag="A"

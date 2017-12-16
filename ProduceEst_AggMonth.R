@@ -10,14 +10,14 @@
 library(lme4)
 
 # load model definitions
-#AODmod <- readRDS("/home/jhbelle/Data/mainmodela.rds")
-#Cloudmod <- readRDS("/home/jhbelle/Data/cloudmodela.rds")
-AODmod <- readRDS("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/mainmodela.rds")
-Cloudmod <- readRDS("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/cloudmodela.rds")
+AODmod <- readRDS("/home/jhbelle/Data/mainmodela.rds")
+Cloudmod <- readRDS("/home/jhbelle/Data/cloudmodela.rds")
+#AODmod <- readRDS("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/mainmodela.rds")
+#Cloudmod <- readRDS("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/cloudmodela.rds")
 
 # Create sequence of dates to loop over
-Startdate = as.Date("2003-01-01", "%Y-%m-%d")
-Enddate = as.Date("2003-01-05", "%Y-%m-%d")
+Startdate = as.Date("2003-02-01", "%Y-%m-%d")
+Enddate = as.Date("2003-12-31", "%Y-%m-%d")
 Days2003 = seq(Startdate, Enddate, by="day")
 
 # Create number of day variables so can divide monthly sums of modeled values by number of days at end
@@ -50,7 +50,7 @@ for (day in seq_along(Days2003)){
   DOY = as.numeric(as.character(date, "%j"))
   # Read data
   #CombDat = try(read.csv(sprintf("/terra/CombinedValues_Jess_GA/CombMAIACCloudNLDASGC_Text_%d%03d_A.csv", Year, DOY)))
-  CombDat = try(read.csv(sprintf("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/CombMAIACCloudNLDASGC_Text_%d%03d_A.csv", Year, DOY)))
+  CombDat = try(read.csv(sprintf("/terra/CombinedValues_Jess_GA/CombMAIACCloudNLDASGC_Text_%d%03d_A.csv", Year, DOY)))
   if (is.data.frame(CombDat)){
     # Prep data for fitting
     CombDat$AOD55 = CombDat$AOD55*0.001
@@ -67,13 +67,7 @@ for (day in seq_along(Days2003)){
       Jandays=Jandays+1
       if (exists("JanAODonly") & exists("JanAODCloud")){
         JanAODonly = merge(JanAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        JanAODonly$AODpredvals = JanAODonly$AODpredvals.x + JanAODonly$AODpredvals.y
-        JanAODonly$AODpredvals.x = NULL
-        JanAODonly$AODpredvals.y = NULL
         JanAODCloud = merge(JanAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        JanAODCloud$AODCloudpred = JanAODCloud$AODCloudpred.x + JanAODCloud$AODCloudpred.y
-        JanAODCloud$AODCloudpred.x = NULL
-        JanAODCloud$AODCloudpred.y = NULL
       } else {
         JanAODonly = AODpredvals
         JanAODCloud = AODCloudpred
@@ -83,13 +77,7 @@ for (day in seq_along(Days2003)){
       Febdays=Febdays+1
       if (exists("FebAODonly") & exists("FebAODCloud")){
         FebAODonly = merge(FebAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        FebAODonly$AODpredvals = FebAODonly$AODpredvals.x + FebAODonly$AODpredvals.y
-        FebAODonly$AODpredvals.x = NULL
-        FebAODonly$AODpredvals.y = NULL
         FebAODCloud = merge(FebAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        FebAODCloud$AODCloudpred = FebAODCloud$AODCloudpred.x + FebAODCloud$AODCloudpred.y
-        FebAODCloud$AODCloudpred.x = NULL
-        FebAODCloud$AODCloudpred.y = NULL
       } else {
         FebAODonly = AODpredvals
         FebAODCloud = AODCloudpred
@@ -99,13 +87,7 @@ for (day in seq_along(Days2003)){
       Mardays=Mardays+1
       if (exists("MarAODonly") & exists("MarAODCloud")){
         MarAODonly = merge(MarAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        MarAODonly$AODpredvals = MarAODonly$AODpredvals.x + MarAODonly$AODpredvals.y
-        MarAODonly$AODpredvals.x = NULL
-        MarAODonly$AODpredvals.y = NULL
         MarAODCloud = merge(MarAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        MarAODCloud$AODCloudpred = MarAODCloud$AODCloudpred.x + MarAODCloud$AODCloudpred.y
-        MarAODCloud$AODCloudpred.x = NULL
-        MarAODCloud$AODCloudpred.y = NULL
       } else {
         MarAODonly = AODpredvals
         MarAODCloud = AODCloudpred
@@ -115,13 +97,7 @@ for (day in seq_along(Days2003)){
       Aprdays=Aprdays+1
       if (exists("AprAODonly") & exists("AprAODCloud")){
         AprAODonly = merge(AprAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        AprAODonly$AODpredvals = AprAODonly$AODpredvals.x + AprAODonly$AODpredvals.y
-        AprAODonly$AODpredvals.x = NULL
-        AprAODonly$AODpredvals.y = NULL
         AprAODCloud = merge(AprAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        AprAODCloud$AODCloudpred = AprAODCloud$AODCloudpred.x + AprAODCloud$AODCloudpred.y
-        AprAODCloud$AODCloudpred.x = NULL
-        AprAODCloud$AODCloudpred.y = NULL
       } else {
         AprAODonly = AODpredvals
         AprAODCloud = AODCloudpred
@@ -131,13 +107,7 @@ for (day in seq_along(Days2003)){
       Maydays=Maydays+1
       if (exists("MayAODonly") & exists("MayAODCloud")){
         MayAODonly = merge(MayAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        MayAODonly$AODpredvals = MayAODonly$AODpredvals.x + MayAODonly$AODpredvals.y
-        MayAODonly$AODpredvals.x = NULL
-        MayAODonly$AODpredvals.y = NULL
         MayAODCloud = merge(MayAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        MayAODCloud$AODCloudpred = MayAODCloud$AODCloudpred.x + MayAODCloud$AODCloudpred.y
-        MayAODCloud$AODCloudpred.x = NULL
-        MayAODCloud$AODCloudpred.y = NULL
       } else {
         MayAODonly = AODpredvals
         MayAODCloud = AODCloudpred
@@ -147,13 +117,7 @@ for (day in seq_along(Days2003)){
       Jundays=Jundays+1
       if (exists("JunAODonly") & exists("JunAODCloud")){
         JunAODonly = merge(JunAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        JunAODonly$AODpredvals = JunAODonly$AODpredvals.x + JunAODonly$AODpredvals.y
-        JunAODonly$AODpredvals.x = NULL
-        JunAODonly$AODpredvals.y = NULL
         JunAODCloud = merge(JunAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        JunAODCloud$AODCloudpred = JunAODCloud$AODCloudpred.x + JunAODCloud$AODCloudpred.y
-        JunAODCloud$AODCloudpred.x = NULL
-        JunAODCloud$AODCloudpred.y = NULL
       } else {
         JunAODonly = AODpredvals
         JunAODCloud = AODCloudpred
@@ -163,13 +127,7 @@ for (day in seq_along(Days2003)){
       Juldays=Juldays+1
       if (exists("JulAODonly") & exists("JulAODCloud")){
         JulAODonly = merge(JulAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        JulAODonly$AODpredvals = JulAODonly$AODpredvals.x + JulAODonly$AODpredvals.y
-        JulAODonly$AODpredvals.x = NULL
-        JulAODonly$AODpredvals.y = NULL
         JulAODCloud = merge(JulAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        JulAODCloud$AODCloudpred = JulAODCloud$AODCloudpred.x + JulAODCloud$AODCloudpred.y
-        JulAODCloud$AODCloudpred.x = NULL
-        JulAODCloud$AODCloudpred.y = NULL
       } else {
         JulAODonly = AODpredvals
         JulAODCloud = AODCloudpred
@@ -179,13 +137,7 @@ for (day in seq_along(Days2003)){
       Augdays=Augdays+1
       if (exists("AugAODonly") & exists("AugAODCloud")){
         AugAODonly = merge(AugAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        AugAODonly$AODpredvals = AugAODonly$AODpredvals.x + AugAODonly$AODpredvals.y
-        AugAODonly$AODpredvals.x = NULL
-        AugAODonly$AODpredvals.y = NULL
         AugAODCloud = merge(AugAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        AugAODCloud$AODCloudpred = AugAODCloud$AODCloudpred.x + AugAODCloud$AODCloudpred.y
-        AugAODCloud$AODCloudpred.x = NULL
-        AugAODCloud$AODCloudpred.y = NULL
       } else {
         AugAODonly = AODpredvals
         AugAODCloud = AODCloudpred
@@ -195,13 +147,7 @@ for (day in seq_along(Days2003)){
       Sepdays=Sepdays+1
       if (exists("SepAODonly") & exists("SepAODCloud")){
         SepAODonly = merge(SepAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        SepAODonly$AODpredvals = SepAODonly$AODpredvals.x + SepAODonly$AODpredvals.y
-        SepAODonly$AODpredvals.x = NULL
-        SepAODonly$AODpredvals.y = NULL
         SepAODCloud = merge(SepAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        SepAODCloud$AODCloudpred = SepAODCloud$AODCloudpred.x + SepAODCloud$AODCloudpred.y
-        SepAODCloud$AODCloudpred.x = NULL
-        SepAODCloud$AODCloudpred.y = NULL
       } else {
         SepAODonly = AODpredvals
         SepAODCloud = AODCloudpred
@@ -211,13 +157,7 @@ for (day in seq_along(Days2003)){
       Octdays=Octdays+1
       if (exists("OctAODonly") & exists("OctAODCloud")){
         OctAODonly = merge(OctAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        OctAODonly$AODpredvals = OctAODonly$AODpredvals.x + OctAODonly$AODpredvals.y
-        OctAODonly$AODpredvals.x = NULL
-        OctAODonly$AODpredvals.y = NULL
         OctAODCloud = merge(OctAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        OctAODCloud$AODCloudpred = OctAODCloud$AODCloudpred.x + OctAODCloud$AODCloudpred.y
-        OctAODCloud$AODCloudpred.x = NULL
-        OctAODCloud$AODCloudpred.y = NULL
       } else {
         OctAODonly = AODpredvals
         OctAODCloud = AODCloudpred
@@ -227,13 +167,7 @@ for (day in seq_along(Days2003)){
       Novdays=Novdays+1
       if (exists("NovAODonly") & exists("NovAODCloud")){
         NovAODonly = merge(NovAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        NovAODonly$AODpredvals = NovAODonly$AODpredvals.x + NovAODonly$AODpredvals.y
-        NovAODonly$AODpredvals.x = NULL
-        NovAODonly$AODpredvals.y = NULL
         NovAODCloud = merge(NovAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        NovAODCloud$AODCloudpred = NovAODCloud$AODCloudpred.x + NovAODCloud$AODCloudpred.y
-        NovAODCloud$AODCloudpred.x = NULL
-        NovAODCloud$AODCloudpred.y = NULL
       } else {
         NovAODonly = AODpredvals
         NovAODCloud = AODCloudpred
@@ -243,13 +177,7 @@ for (day in seq_along(Days2003)){
       Decdays=Decdays+1
       if (exists("DecAODonly") & exists("DecAODCloud")){
         DecAODonly = merge(DecAODonly, AODpredvals, by="CombDat$Input_FID", all=T)
-        DecAODonly$AODpredvals = DecAODonly$AODpredvals.x + DecAODonly$AODpredvals.y
-        DecAODonly$AODpredvals.x = NULL
-        DecAODonly$AODpredvals.y = NULL
         DecAODCloud = merge(DecAODCloud, AODCloudpred, by="CombDat$Input_FID", all=T)
-        DecAODCloud$AODCloudpred = DecAODCloud$AODCloudpred.x + DecAODCloud$AODCloudpred.y
-        DecAODCloud$AODCloudpred.x = NULL
-        DecAODCloud$AODCloudpred.y = NULL
       } else {
         DecAODonly = AODpredvals
         DecAODCloud = AODCloudpred
@@ -258,98 +186,89 @@ for (day in seq_along(Days2003)){
   }
 }
 
-JanOut = merge(JanAODonly, JanAODCloud, by="CombDat$Input_FID")
-JanOut$AODpredvals = JanOut$AODpredvals/Jandays
-JanOut$AODCloudpred = JanOut$AODCloudpred/Jandays
-JanOut$AbsDiff = JanOut$AODCloudpred = JanOut$AODpredvals
-JanOut$RelDiff = (2*(JanOut$AbsDiff))/(JanOut$AODpredvals + JanOut$AODCloudpred)
-summary(JanOut)
-write.csv(JanOut, "/home/jhbelle/Data/JanPredictedValues_2003_GA.csv")
+write.csv(JanAODonly, "/home/jhbelle/Data/JanPredVals_2003_GA.csv", row.names=F)
+write.csv(JanAODCloud, "/home/jhbelle/Data/JanPredCloudVals_2003_GA.csv", row.names=F)
+#JanAODonly2 = rowSums(JanAODonly[,2:Jandays+1], na.rm=T)
+#JanAODCloud2 = rowSums(JanAODCloud[,2:Jandays+1], na.rm=T)
+#JanAODonly2 = cbind.data.frame(JanAODonly$CombDat$Input_FID, JanAODonly2)
+#colnames(JanAODonly2) <- c("Input_FID", "AODpredvals")
+#JanAODCloud2 = cbind.data.frame(JanAODCloud$CombDat$InputFID, JanAODCloud2)
+#colnames(JanAOCCloud2) <- c("Input_FID", "AODCloudpred")
+#anOut = merge(JanAODonly2, JanAODCloud2, by="Input_FID")
+#anOut$AODpredvals = JanOut$AODpredvals/Jandays
+#JanOut$AODCloudpred = JanOut$AODCloudpred/Jandays
+#JanOut$AbsDiff = JanOut$AODCloudpred - JanOut$AODpredvals
+#JanOut$RelDiff = (2*(JanOut$AbsDiff))/(JanOut$AODpredvals + JanOut$AODCloudpred)
+#summary(JanOut)
+#write.csv(JanOut, "/home/jhbelle/Data/JanPredictedValues_2003_GA.csv", row.names=F)
 
-FebOut = merge(FebAODonly, FebAODCloud, by="CombDat$Input_FID")
-FebOut$AODpredvals = FebOut$AODpredvals/Febdays
-FebOut$AODCloudpred = FebOut$AODCloudpred/Febdays
-FebOut$AbsDiff = FebOut$AODCloudpred = FebOut$AODpredvals
-FebOut$RelDiff = (2*(FebOut$AbsDiff))/(FebOut$AODpredvals + FebOut$AODCloudpred)
-summary(FebOut)
-write.csv(FebOut, "/home/jhbelle/Data/FebPredictedValues_2003_GA.csv")
+write.csv(FebAODonly, "/home/jhbelle/Data/FebPredVals_2003_GA.csv", row.names=F)
+write.csv(FebAODCloud, "/home/jhbelle/Data/FebPredCloudVals_2003_GA.csv", row.names=F)
 
-MarOut = merge(MarAODonly, MarAODCloud, by="CombDat$Input_FID")
-MarOut$AODpredvals = MarOut$AODpredvals/Mardays
-MarOut$AODCloudpred = MarOut$AODCloudpred/Mardays
-MarOut$AbsDiff = MarOut$AODCloudpred = MarOut$AODpredvals
-MarOut$RelDiff = (2*(MarOut$AbsDiff))/(MarOut$AODpredvals + MarOut$AODCloudpred)
-summary(MarOut)
-write.csv(MarOut, "/home/jhbelle/Data/MarPredictedValues_2003_GA.csv")
 
-AprOut = merge(AprAODonly, AprAODCloud, by="CombDat$Input_FID")
-AprOut$AODpredvals = AprOut$AODpredvals/Aprdays
-AprOut$AODCloudpred = AprOut$AODCloudpred/Aprdays
-AprOut$AbsDiff = AprOut$AODCloudpred = AprOut$AODpredvals
-AprOut$RelDiff = (2*(AprOut$AbsDiff))/(AprOut$AODpredvals + AprOut$AODCloudpred)
-summary(AprOut)
-write.csv(AprOut, "/home/jhbelle/Data/AprPredictedValues_2003_GA.csv")
+write.csv(MarAODonly, "/home/jhbelle/Data/MarPredVals_2003_GA.csv", row.names=F)
+write.csv(MarAODCloud, "/home/jhbelle/Data/MarPredCloudVals_2003_GA.csv", row.names=F)
 
-MayOut = merge(MayAODonly, MayAODCloud, by="CombDat$Input_FID")
-MayOut$AODpredvals = MayOut$AODpredvals/Maydays
-MayOut$AODCloudpred = MayOut$AODCloudpred/Maydays
-MayOut$AbsDiff = MayOut$AODCloudpred = MayOut$AODpredvals
-MayOut$RelDiff = (2*(MayOut$AbsDiff))/(MayOut$AODpredvals + MayOut$AODCloudpred)
-summary(MayOut)
-write.csv(MayOut, "/home/jhbelle/Data/MayPredictedValues_2003_GA.csv")
+write.csv(AprAODonly, "/home/jhbelle/Data/AprPredVals_2003_GA.csv", row.names=F)
+write.csv(AprAODCloud, "/home/jhbelle/Data/AprPredCloudVals_2003_GA.csv", row.names=F)
 
-JunOut = merge(JunAODonly, JunAODCloud, by="CombDat$Input_FID")
-JunOut$AODpredvals = JunOut$AODpredvals/Jundays
-JunOut$AODCloudpred = JunOut$AODCloudpred/Jundays
-JunOut$AbsDiff = JunOut$AODCloudpred = JunOut$AODpredvals
-JunOut$RelDiff = (2*(JunOut$AbsDiff))/(JunOut$AODpredvals + JunOut$AODCloudpred)
-summary(JunOut)
-write.csv(JunOut, "/home/jhbelle/Data/JunPredictedValues_2003_GA.csv")
+write.csv(MayAODonly, "/home/jhbelle/Data/MayPredVals_2003_GA.csv", row.names=F)
+write.csv(MayAODCloud, "/home/jhbelle/Data/MayPredCloudVals_2003_GA.csv", row.names=F)
 
-JulOut = merge(JulAODonly, JulAODCloud, by="CombDat$Input_FID")
-JulOut$AODpredvals = JulOut$AODpredvals/Juldays
-JulOut$AODCloudpred = JulOut$AODCloudpred/Juldays
-JulOut$AbsDiff = JulOut$AODCloudpred = JulOut$AODpredvals
-JulOut$RelDiff = (2*(JulOut$AbsDiff))/(JulOut$AODpredvals + JulOut$AODCloudpred)
-summary(JulOut)
-write.csv(JulOut, "/home/jhbelle/Data/JulPredictedValues_2003_GA.csv")
+write.csv(JunAODonly, "/home/jhbelle/Data/JunPredVals_2003_GA.csv", row.names=F)
+write.csv(JunAODCloud, "/home/jhbelle/Data/JunPredCloudVals_2003_GA.csv", row.names=F)
 
-AugOut = merge(AugAODonly, AugAODCloud, by="CombDat$Input_FID")
-AugOut$AODpredvals = AugOut$AODpredvals/Augdays
-AugOut$AODCloudpred = AugOut$AODCloudpred/Augdays
-AugOut$AbsDiff = AugOut$AODCloudpred = AugOut$AODpredvals
-AugOut$RelDiff = (2*(AugOut$AbsDiff))/(AugOut$AODpredvals + AugOut$AODCloudpred)
-summary(AugOut)
-write.csv(AugOut, "/home/jhbelle/Data/AugPredictedValues_2003_GA.csv")
+write.csv(JulAODonly, "/home/jhbelle/Data/JulPredVals_2003_GA.csv", row.names=F)
+write.csv(JulAODCloud, "/home/jhbelle/Data/JulPredCloudVals_2003_GA.csv", row.names=F)
 
-SepOut = merge(SepAODonly, SepAODCloud, by="CombDat$Input_FID")
-SepOut$AODpredvals = SepOut$AODpredvals/Sepdays
-SepOut$AODCloudpred = SepOut$AODCloudpred/Sepdays
-SepOut$AbsDiff = SepOut$AODCloudpred = SepOut$AODpredvals
-SepOut$RelDiff = (2*(SepOut$AbsDiff))/(SepOut$AODpredvals + SepOut$AODCloudpred)
-summary(SepOut)
-write.csv(SepOut, "/home/jhbelle/Data/SepPredictedValues_2003_GA.csv")
+write.csv(AugAODonly, "/home/jhbelle/Data/AugPredVals_2003_GA.csv", row.names=F)
+write.csv(AugAODCloud, "/home/jhbelle/Data/AugPredCloudVals_2003_GA.csv", row.names=F)
 
-OctOut = merge(OctAODonly, OctAODCloud, by="CombDat$Input_FID")
-OctOut$AODpredvals = OctOut$AODpredvals/Octdays
-OctOut$AODCloudpred = OctOut$AODCloudpred/Octdays
-OctOut$AbsDiff = OctOut$AODCloudpred = OctOut$AODpredvals
-OctOut$RelDiff = (2*(OctOut$AbsDiff))/(OctOut$AODpredvals + OctOut$AODCloudpred)
-summary(OctOut)
-write.csv(OctOut, "/home/jhbelle/Data/OctPredictedValues_2003_GA.csv")
+write.csv(SepAODonly, "/home/jhbelle/Data/SepPredVals_2003_GA.csv", row.names=F)
+write.csv(SepAODCloud, "/home/jhbelle/Data/SepPredCloudVals_2003_GA.csv", row.names=F)
 
-NovOut = merge(NovAODonly, NovAODCloud, by="CombDat$Input_FID")
-NovOut$AODpredvals = NovOut$AODpredvals/Novdays
-NovOut$AODCloudpred = NovOut$AODCloudpred/Novdays
-NovOut$AbsDiff = NovOut$AODCloudpred = NovOut$AODpredvals
-NovOut$RelDiff = (2*(NovOut$AbsDiff))/(NovOut$AODpredvals + NovOut$AODCloudpred)
-summary(NovOut)
-write.csv(NovOut, "/home/jhbelle/Data/NovPredictedValues_2003_GA.csv")
+write.csv(OctAODonly, "/home/jhbelle/Data/OctPredVals_2003_GA.csv", row.names=F)
+write.csv(OctAODCloud, "/home/jhbelle/Data/OctPredCloudVals_2003_GA.csv", row.names=F)
 
-DecOut = merge(DecAODonly, DecAODCloud, by="CombDat$Input_FID")
-DecOut$AODpredvals = DecOut$AODpredvals/Decdays
-DecOut$AODCloudpred = DecOut$AODCloudpred/Decdays
-DecOut$AbsDiff = DecOut$AODCloudpred = DecOut$AODpredvals
-DecOut$RelDiff = (2*(DecOut$AbsDiff))/(DecOut$AODpredvals + DecOut$AODCloudpred)
-summary(DecOut)
-write.csv(DecOut, "/home/jhbelle/Data/DecPredictedValues_2003_GA.csv")
+write.csv(NovAODonly, "/home/jhbelle/Data/NovPredVals_2003_GA.csv", row.names=F)
+write.csv(NovAODCloud, "/home/jhbelle/Data/NovPredCloudVals_2003_GA.csv", row.names=F)
+
+write.csv(DecAODonly, "/home/jhbelle/Data/DecPredVals_2003_GA.csv", row.names=F)
+write.csv(DecAODCloud, "/home/jhbelle/Data/DecPredCloudVals_2003_GA.csv", row.names=F)
+
+summary(JanAODonly)
+summary(JanAODCloud)
+Jandays
+summary(FebAODonly)
+summary(FebAODCloud)
+Febdays
+summary(MarAODonly)
+summary(MarAODCloud)
+Mardays
+summary(AprAODonly)
+summary(AprAODCloud)
+Aprdays
+summary(MayAODonly)
+summary(MayAODCloud)
+Maydays
+summary(JunAODonly)
+summary(JunAODCloud)
+Jundays
+summary(JulAODonly)
+summary(JulAODCloud)
+Juldays
+summary(AugAODonly)
+summary(AugAODCloud)
+Augdays
+summary(SepAODonly)
+summary(SepAODCloud)
+Sepdays
+summary(OctAODonly)
+summary(OctAODCloud)
+Octdays
+summary(NovAODonly)
+summary(NovAODCloud)
+Novdays
+summary(DecAODonly)
+summary(DecAODCloud)
+Decdays

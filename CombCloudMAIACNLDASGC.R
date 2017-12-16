@@ -18,8 +18,8 @@ source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
 # ------
 
 # Loop start/end dates
-Startdate = as.Date("2004-04-12", "%Y-%m-%d")
-Enddate = as.Date("2004-12-31", "%Y-%m-%d")
+Startdate = as.Date("2003-12-01", "%Y-%m-%d")
+Enddate = as.Date("2003-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)
@@ -29,11 +29,12 @@ Tiles=c("h04v04", "h04v05")
 ATflag = "A"
 
 # Complete list of locations - MAIAC tiles with all additional information including NLDAS matching
-h04v04 = read.csv("/home/jhbelle/Data/FinGrid/Comp_H04v04.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLenP", "MEAN", "MEAN_1", "MEAN_12", "Sum_RdLeng", "Lonchar", "Latchar")]
+h04v04 = read.csv("/terra/Data/FinGrid/Comp_H04v04.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLenP", "MEAN", "MEAN_1", "MEAN_12", "Sum_RdLeng", "Lonchar", "Latchar")]
 colnames(h04v04) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
-h04v05 = read.csv("/home/jhbelle/Data/FinGrid/Comp_H04v05.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLen", "MEAN", "MEAN_1", "MEAN_12", "Sum_LocRdL", "Lonchar", "Latchar")]
+h04v05 = read.csv("/terra/Data/FinGrid/Comp_H04v05.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLen", "MEAN", "MEAN_1", "MEAN_12", "Sum_LocRdL", "Lonchar", "Latchar")]
 colnames(h04v05) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
 MAIACPixels = rbind.data.frame(h04v04, h04v05)
+str(MAIACPixels)
 #MAIACPixels$NLDASLon = round(MAIACPixels$NLDASLon, digits=3)
 #MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
 
@@ -56,7 +57,8 @@ GClat = rep(latvec, each=144)
 GClon = rep(longvec, 91)
 GClatlon = cbind.data.frame(GClat, GClon)
 #write.csv(GClatlon, "C:/Users/jhbelle/Desktop/Testing_GC/LatLon.csv")
-MAIACtoGC = read.csv("/home/jhbelle/Data/FinGrid/GCmatched.csv", stringsAsFactors = F)[,c("Input_FID", "GClat", "GClon")]
+MAIACtoGC = read.csv("/terra/Data/FinGrid/GCmatched.csv", stringsAsFactors = F)[,c("Input_FID", "GClat", "GClon")]
+MAIACtoGC$GClon = ifelse(MAIACtoGC$GClon == -82, -82.500, MAIACtoGC$GClon)
 # Add GC lat/lon matches to MAIACpixels
 MAIACPixels = merge(MAIACPixels, MAIACtoGC)
 
@@ -83,7 +85,7 @@ for (day in seq_along(SeqDates)){
       # Read MAIAC file
       MAIACpart <- read.csv(file, stringsAsFactors = F)[,c("InputFID", "AOD55")]
       # Remove missing observations
-      MAIACpart = subset(MAIACpart, MAIACpart$AOD55 != -28672)
+      #MAIACpart = subset(MAIACpart, MAIACpart$AOD55 != -28672)
       # Move non-missing obs to dataset for all tiles/granules
       if (length(MAIACpart$AOD55) > 0){
         if (exists("MAIAC")){
@@ -133,7 +135,6 @@ for (day in seq_along(SeqDates)){
     }
     # Remove days MAIAC file
     rm(MAIAC, ListMdat, MAIACpart, CloudMAIACClean, CPclean, CEclean, CFclean, CPCEclean, CPCECFclean, MAIACpixelsMAIAC)
-    str(MAIACCloud)
     # Pull NLDAS values for each pixel/overpass
     NearestHour = round(MAIACCloud[1,"Timestamp"])
     # ForA file
@@ -145,8 +146,7 @@ for (day in seq_along(SeqDates)){
       colnames(varval) <- c("Long", "Lat", var)
       varval$Lat = as.numeric(as.character(varval$Lat))
       varval$Long = as.numeric(as.character(varval$Long))
-      str(varval)
-      MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"))
+      MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"), all.x=T)
     }
     NLDASForB = nc_open(sprintf("%s/File_B/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
     Lat = ncvar_get(NLDASForB, "lat")
@@ -156,13 +156,16 @@ for (day in seq_along(SeqDates)){
       colnames(varval) <- c("Long", "Lat", var)
       varval$Lat = as.numeric(as.character(varval$Lat))
       varval$Long = as.numeric(as.character(varval$Long))
-      MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"))
+      MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"), all.x=T)
     }
     # Pull GC values for each pixel/overpass
     if (NearestHour %% 2 == 0){ GChour = NearestHour } else { GChour = NearestHour + 1 }
+    print(GChour)
     GCvals <- read.csv(sprintf("%s/%d/tp%d%02d%02d%02d.csv", GCloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), GChour), stringsAsFactors = F)
     GCdat = cbind.data.frame(GClatlon, GCvals)
-    MAIACCloudNLDASGC <- merge(MAIACCloud, GCdat)
+    summary(GCdat)
+    summary(MAIACCloud)
+    MAIACCloudNLDASGC <- merge(MAIACCloud, GCdat, all.x=T)
     # Export days data
     write.csv(MAIACCloudNLDASGC, sprintf("%s/CombMAIACCloudNLDASGC_Text_%d%03d_%s.csv", OutpLoc, year, jday, ATflag))
     
