@@ -34,7 +34,7 @@ colnames(h04v04) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PI
 h04v05 = read.csv("/terra/Data/FinGrid/Comp_H04v05.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLen", "MEAN", "MEAN_1", "MEAN_12", "Sum_LocRdL", "Lonchar", "Latchar")]
 colnames(h04v05) <- c("Input_FID", "NEI2011", "PSecRdLen", "PForst", "Elev", "PImperv", "LocRdLen", "NLDASLon", "NLDASLat")
 MAIACPixels = rbind.data.frame(h04v04, h04v05)
-str(MAIACPixels)
+#str(MAIACPixels)
 #MAIACPixels$NLDASLon = round(MAIACPixels$NLDASLon, digits=3)
 #MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
 
@@ -85,7 +85,7 @@ for (day in seq_along(SeqDates)){
       # Read MAIAC file
       MAIACpart <- read.csv(file, stringsAsFactors = F)[,c("InputFID", "AOD55")]
       # Remove missing observations
-      #MAIACpart = subset(MAIACpart, MAIACpart$AOD55 != -28672)
+      MAIACpart = subset(MAIACpart, MAIACpart$AOD55 != -28672)
       # Move non-missing obs to dataset for all tiles/granules
       if (length(MAIACpart$AOD55) > 0){
         if (exists("MAIAC")){
@@ -163,8 +163,8 @@ for (day in seq_along(SeqDates)){
     print(GChour)
     GCvals <- read.csv(sprintf("%s/%d/tp%d%02d%02d%02d.csv", GCloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), GChour), stringsAsFactors = F)
     GCdat = cbind.data.frame(GClatlon, GCvals)
-    summary(GCdat)
-    summary(MAIACCloud)
+    #summary(GCdat)
+    #summary(MAIACCloud)
     MAIACCloudNLDASGC <- merge(MAIACCloud, GCdat, all.x=T)
     # Export days data
     write.csv(MAIACCloudNLDASGC, sprintf("%s/CombMAIACCloudNLDASGC_Text_%d%03d_%s.csv", OutpLoc, year, jday, ATflag))

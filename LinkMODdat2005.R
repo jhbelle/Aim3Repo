@@ -17,8 +17,8 @@ source("/home/jhbelle/Aim3Repo/Functions_LinkMODdat_Grid.r")
 #args = commandArgs(trailingOnly=T)
 #Endday = as.numeric(args[2])
 #Startday = as.numeric(args[1])
-Endday=366
-Startday=335
+Endday=365
+Startday=223
 ## Year
 Year = 2005
 TAflag="A"
@@ -60,8 +60,8 @@ for (Day in Startday:Endday){
         gc()
       }  
     }
-    ## Write output csv
-    write.csv(OutpDay, sprintf("%sDailyGridAOD_%i_%03d.csv", OutPath, Year, Day))
-    rm(OutpDay)
   }
+  ## Write output csv
+  write.csv(OutpDay, sprintf("%sDailyGridAOD_%i_%03d.csv", OutPath, Year, Day))
+  rm(OutpDay)
 }

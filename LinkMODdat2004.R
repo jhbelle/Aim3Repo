@@ -60,8 +60,8 @@ for (Day in Startday:Endday){
         gc()
       }  
     }
-    ## Write output csv
-    write.csv(OutpDay, sprintf("%sDailyGridAOD_%i_%03d.csv", OutPath, Year, Day))
-    rm(OutpDay)
   }
+  ## Write output csv
+  write.csv(OutpDay, sprintf("%sDailyGridAOD_%i_%03d.csv", OutPath, Year, Day))
+  rm(OutpDay)
 }
