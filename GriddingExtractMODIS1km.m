@@ -14,16 +14,16 @@
 % -----------------------
 % Change these parameters!!!!
 % -----------------------
-yr = 2006;
-IPath1 = '/aura/Jess_MOYD06_MOYD03_Georgia/MOYD06/2006/';
-IPath2 = '/aura/Jess_MOYD06_MOYD03_Georgia/MOYD03/2006/';
-Opath ='/aura/Jess_MOYD06_MOYD03_Georgia/MOYD03_Extr/2006/';
+yr = 2004;
+IPath1 = '/aura/Jess_MOYD06_MOYD03_Georgia/MOYD06/2004/';
+IPath2 = '/aura/Jess_MOYD06_MOYD03_Georgia/MOYD03/2004/';
+Opath ='/aura/Jess_MOYD06_MOYD03_Georgia/MYD03_Extr/2004/';
 SectionCoors = {[35.1, -85.7, -80.7, 30.3]};
 
 % Cycle through each day in year, and get list of files for each
-for day=4:365
-    filelist1 = dir(sprintf('%sMOD06_L2.A%u%03d.*.hdf', IPath1, yr, day));
-    filelist2 = dir(sprintf('%sMOD03.A%u%03d.*.hdf', IPath2, yr, day));
+for day=1:366
+    filelist1 = dir(sprintf('%sMYD06_L2.A%u%03d.*.hdf', IPath1, yr, day));
+    filelist2 = dir(sprintf('%sMYD03.A%u%03d.*.hdf', IPath2, yr, day));
     if length(filelist1) == length(filelist2)
         % Initialize output structure for section data
         Varnames = {'Lat', 'Long', 'CloudAOD', 'CloudWaterPath', 'CloudEffRad', 'hr', 'min'};

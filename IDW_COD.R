@@ -18,7 +18,7 @@ source("/home/jhbelle/Aim3Repo/Functions_IDW.R")
 # ------
 
 # Location of 1 km extracted MODIS swath values
-SwathLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/MOYD03_Extr/"
+SwathLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD03_Extr/"
 
 # MAIAC grid values
 MAIACgrid = read.csv("/terra/Data/FinGrid/XYpoints_MAIACgrid.csv")[,c("FID", "POINT_X", "POINT_Y")]
@@ -38,7 +38,7 @@ SeqDays = seq(Startday, Endday, by="day")
 Scale = 0.009999999776482582
 
 # Output location
-OutLoc = ""
+OutLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Terra/"
 
 # ------
 # For each day and time stamp, interpolate values
@@ -51,8 +51,9 @@ for (day in seq_along(SeqDays)){
   # Pull julian day
   Jday = as.numeric(as.character(date, "%j"))
   # Read this days data
-  DaysDat = try(read.csv(sprintf("%s%d/Extr_%d_%03d_S1.csv", SwathLoc, Year, Year, Jday), stringsAsFactors = F))[,c("Lat", "Long", "CloudAOD", "hr", "min")]
+  DaysDat = try(read.csv(sprintf("%s%d/Extr_%d_%03d_S1.csv", SwathLoc, Year, Year, Jday), stringsAsFactors = F))
   if (is.data.frame(DaysDat)){
+    DaysDat = DaysDat[,c("Lat", "Long", "CloudAOD", "hr", "min")]
     # Get number of distinct time stamps in day
     DaysDat$Timestamp = sprintf("%02d:%02d", DaysDat$hr, DaysDat$min)
     Timestamps = names(summary(as.factor(DaysDat$Timestamp)))
@@ -63,7 +64,6 @@ for (day in seq_along(SeqDays)){
       # Interpolate values
       InterpolCOD = idw.interp(xo = TimeDat$Long, yo = TimeDat$Lat, zo = TimeDat$COD, xn = MAIACgrid$POINT_X, yn = MAIACgrid$POINT_Y, projold = SwathProj, projnew = MAIACproj)
       Interpoldat = cbind.data.frame(MAIACgrid$FID, InterpolCOD)
-      colnames(Interpoldat) <- c("Input_FID", "COD")
       if (exists("Outdat")){
         Outdat = rbind.data.frame(Outdat, Interpoldat)
       } else {

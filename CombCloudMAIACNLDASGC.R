@@ -18,15 +18,15 @@ source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
 # ------
 
 # Loop start/end dates
-Startdate = as.Date("2003-12-01", "%Y-%m-%d")
-Enddate = as.Date("2003-12-31", "%Y-%m-%d")
+Startdate = as.Date("2005-03-18", "%Y-%m-%d")
+Enddate = as.Date("2005-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)
 Tiles=c("h04v04", "h04v05")
 
 # Overpass
-ATflag = "A"
+ATflag = "T"
 
 # Complete list of locations - MAIAC tiles with all additional information including NLDAS matching
 h04v04 = read.csv("/terra/Data/FinGrid/Comp_H04v04.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLenP", "MEAN", "MEAN_1", "MEAN_12", "Sum_RdLeng", "Lonchar", "Latchar")]
@@ -39,11 +39,11 @@ MAIACPixels = rbind.data.frame(h04v04, h04v05)
 #MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
 
 # Location of MAIAC data outputs
-MAIACLocs <- c("/gc_runs/h04v04maiacout_Aqua/", "/gc_runs/h04v05maiacout_Aqua/")
+MAIACLocs <- c("/gc_runs/h04v04maiacout/", "/gc_runs/h04v05maiacout/")
 # Location of cloud data outputs
-CloudLoc <- "/terra/Linked_GA_MYD06_5k/"
+CloudLoc <- "/terra/Linked_GA_MOD06_5k/"
 # Location of NLDAS data files
-NLDASloc = "/terra/NLDAS_2/"
+NLDASloc = "/aura/Jianzhao/NLDAS_ORI/data/"
 # ForA variables
 ForAvars = c("var11", "var51", "var1", "var33", "var34", "var205", "var153", "var157", "var228", "var61", "var204")
 # ForB variables
@@ -63,7 +63,7 @@ MAIACtoGC$GClon = ifelse(MAIACtoGC$GClon == -82, -82.500, MAIACtoGC$GClon)
 MAIACPixels = merge(MAIACPixels, MAIACtoGC)
 
 # Output location
-OutpLoc = "/terra/CombinedValues_Jess_GA/"
+OutpLoc = "/terra/CombinedValues_Jess_GA_Terra/"
 
 # -------
 # Procedural code
@@ -138,7 +138,7 @@ for (day in seq_along(SeqDates)){
     # Pull NLDAS values for each pixel/overpass
     NearestHour = round(MAIACCloud[1,"Timestamp"])
     # ForA file
-    NLDASForA = nc_open(sprintf("%s/File_A/%d/NLDAS_FORA0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
+    NLDASForA = nc_open(sprintf("%s/NLDAS_FORA0125_H.002/%d/NLDAS_FORA0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
     Lat = ncvar_get(NLDASForA, "lat")
     Lon = ncvar_get(NLDASForA, "lon")
     for (var in ForAvars){
@@ -148,7 +148,7 @@ for (day in seq_along(SeqDates)){
       varval$Long = as.numeric(as.character(varval$Long))
       MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"), all.x=T)
     }
-    NLDASForB = nc_open(sprintf("%s/File_B/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
+    NLDASForB = nc_open(sprintf("%s/NLDAS_FORB0125_H.002/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
     Lat = ncvar_get(NLDASForB, "lat")
     Lon = ncvar_get(NLDASForB, "lon")
     for (var in ForBvars){

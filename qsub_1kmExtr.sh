@@ -1,3 +1,3 @@
 #!/bin/bash
-#$ -N A1kmExtrAtl
+#$ -N A1kmExtrGA
 matlab -nojvm -nosplash -r "GriddingExtractMODIS1km"

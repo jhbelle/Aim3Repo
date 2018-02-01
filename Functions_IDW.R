@@ -23,7 +23,7 @@ idw.interp <- function(xo, yo, zo, xn, yn, nmax = 4, maxdist = Inf, projold, pro
   oldproj = spTransform(old, CRS(projnew))
   
   # Do the inverse distance weighted interpolation
-  zn <- idw(formula = z ~ 1, locations = old, newdata = new, nmax = nmax, maxdist = maxdist)
+  zn <- idw(formula = z ~ 1, locations = oldproj, newdata = new, nmax = nmax, maxdist = maxdist)
   zn <- as.data.frame(zn)
   
   # Post-processing of idw
