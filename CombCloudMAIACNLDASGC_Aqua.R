@@ -18,15 +18,15 @@ source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
 # ------
 
 # Loop start/end dates
-Startdate = as.Date("2005-12-18", "%Y-%m-%d")
-Enddate = as.Date("2005-12-31", "%Y-%m-%d")
+Startdate = as.Date("2004-12-25", "%Y-%m-%d")
+Enddate = as.Date("2004-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)
 Tiles=c("h04v04", "h04v05")
 
 # Overpass
-ATflag = "T"
+ATflag = "A"
 
 # Complete list of locations - MAIAC tiles with all additional information including NLDAS matching
 h04v04 = read.csv("/terra/Data/FinGrid/Comp_H04v04.csv", stringsAsFactors = F)[,c("Input_FID", "Sum_PM2_5_", "Sum_RdLenP", "MEAN", "MEAN_1", "MEAN_12", "Sum_RdLeng", "Lonchar", "Latchar")]
@@ -39,9 +39,9 @@ MAIACPixels = rbind.data.frame(h04v04, h04v05)
 #MAIACPixels$NLDASLat = round(MAIACPixels$NLDASLat, digits=3)
 
 # Location of MAIAC data outputs
-MAIACLocs <- c("/gc_runs/h04v04maiacout/", "/gc_runs/h04v05maiacout/")
+MAIACLocs <- c("/gc_runs/h04v04maiacout_Aqua/", "/gc_runs/h04v05maiacout_Aqua/")
 # Location of cloud data outputs
-CloudLoc <- "/terra/Linked_GA_MOD06_5k/"
+CloudLoc <- "/terra/Linked_GA_MYD06_5k/"
 # Location of NLDAS data files
 NLDASloc = "/aura/Jianzhao/NLDAS_ORI/data/"
 # ForA variables
@@ -63,7 +63,7 @@ MAIACtoGC$GClon = ifelse(MAIACtoGC$GClon == -82, -82.500, MAIACtoGC$GClon)
 MAIACPixels = merge(MAIACPixels, MAIACtoGC)
 
 # Output location
-OutpLoc = "/terra/CombinedValues_Jess_GA_Terra/"
+OutpLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
 
 # -------
 # Procedural code

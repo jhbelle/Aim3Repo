@@ -17,12 +17,12 @@ library(ncdf4)
 
 Startday = 1
 Endday = 365
-Year = 2004
+Year = 2005
 
 # Location of Combined files
 CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
 
-RH = nc_open("/terra/Data/rhum.2m.2004.nc")
+RH = nc_open("/terra/Data/rhum.2m.2005.nc")
 RH2 = ncvar_get(RH, "rhum")
 time = ncvar_get(RH, "time")
 Datetimes = as.POSIXlt(time*60*60, origin=as.POSIXlt("1800-01-01 00:00", "%Y-%m-%d %H:%M", tz="GMT"), tz="GMT")
@@ -31,7 +31,7 @@ lon = matrix(ncvar_get(RH, "lon"), ncol=1)
 # Export NARR lat/lon values for spatial join to MAIAC grid
 #NARRLatLon = cbind.data.frame(lat, lon)
 #write.csv(NARRLatLon, "T:/eohprojs/CDC_Climatechange/Jess/Dissertation/Paper3_Data/NARRlatlon.csv", row.names = F)
-PBLh = nc_open("/terra/Data/hpbl.2004.nc")
+PBLh = nc_open("/terra/Data/hpbl.2005.nc")
 hPBL = ncvar_get(PBLh, "hpbl")
 
 # Read in matching between MAIAC and NARR grids

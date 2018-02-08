@@ -22,16 +22,16 @@ Yearstart = 1
 Yearend = 365
 
 # TA flag
-TAflag = "A"
+TAflag = "T"
 
 # MAIAC grid
 MAIACgrid = readOGR("/terra/Data/FinGrid/MAIACgrid_Proj.shp", "MAIACgrid_Proj")
 
 # Fire Spots
-FireSpots = read.table("/terra/Data/FireSpots_2005_GA_Aqua.csv", header = T, stringsAsFactors = F)
+FireSpots = read.table("/terra/Data/FireSpots_2005_GA_Terra.csv", header = T, stringsAsFactors = F)
 
 # Combined files
-CombLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
+CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
 
 ## ----
 # Loop over days in year

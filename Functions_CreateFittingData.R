@@ -10,7 +10,7 @@
 
 GetOtherVars <- function(datblock, ATflag){
   Date = as.Date(datblock$Date.Local[1], "%Y-%m-%d")
-  SatDat = try(read.csv(sprintf("/terra/CombinedValues_Jess_GA/CombMAIACCloudNLDASGC_Text_%d%03d_%s.csv", as.numeric(as.character(Date, "%Y")), as.numeric(as.character(Date, "%j")), ATflag)))
+  SatDat = try(read.csv(sprintf("/terra/CombinedValues_Jess_GA_Terra/CombMAIACCloudNLDASGC_Text_%d%03d_%s.csv", as.numeric(as.character(Date, "%Y")), as.numeric(as.character(Date, "%j")), ATflag)))
   if (is.data.frame(SatDat)){
     Outp = merge(datblock, SatDat, by="Input_FID", all.x=T)
     return(Outp)

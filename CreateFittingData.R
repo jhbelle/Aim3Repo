@@ -16,7 +16,7 @@ source("/home/jhbelle/Aim3Repo/Functions_CreateFittingData.R")
 
 EPAdat <- read.csv("/terra/Data/GAFRM_EPAobs.csv", stringsAsFactors = F)
 # Subset to 2003
-EPAdat = subset(EPAdat, substr(EPAdat$Date.Local, 1, 4) == "2003")
+#EPAdat = subset(EPAdat, substr(EPAdat$Date.Local, 1, 4) == "2003")
 
 # -----
 # Read in join to MAIAC
@@ -29,10 +29,10 @@ EPAdat <- merge(EPAdat, EPAtoMAIAC, by.x=c("State.Code", "County.Code", "Site.Nu
 # Create fitting data
 # ----
 
-FittingData = ddply(EPAdat, .(Date.Local), GetOtherVars, ATflag="A")
+FittingData = ddply(EPAdat, .(Date.Local), GetOtherVars, ATflag="T")
 
 # ----
 # Write fitting dataset
 # ----
 
-write.csv(FittingData, "/terra/Data/FittingData_GA_Aqua.csv")
+write.csv(FittingData, "/terra/Data/FittingData_GA_Terra.csv")

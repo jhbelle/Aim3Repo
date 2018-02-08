@@ -13,7 +13,7 @@
 ## ----
 
 # TA flag
-TAflag = "A"
+TAflag = "T"
 
 # Time 
 Startdate = as.Date("2003-01-01", "%Y-%m-%d")
@@ -21,10 +21,10 @@ Enddate = as.Date("2005-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, by="day")
 
 # Location of Combined files
-CombLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
+CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
 
 # Location of interpolated COD files
-InterpCODLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Aqua/"
+InterpCODLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Terra/"
 
 ## ----
 # Loop over days
@@ -39,10 +39,11 @@ for (day in seq_along(SeqDates)){
   # Read Combined file, if it exists
   CombDat = try(read.csv(Combfile, stringsAsFactors = F))
   if (is.data.frame(CombDat)){
-    InterpCODDat = try(read.csv(sprintf("%sInterpolatedCOD_%d_%03d.csv"), stringsAsFactors = F))
+    CombDat = CombDat[,1:48]
+    InterpCODDat = try(read.csv(sprintf("%sInterpolatedCOD_%d_%03d.csv", InterpCODLoc, Year, Jday), stringsAsFactors = F))
     if (is.data.frame(InterpCODDat)){
       colnames(InterpCODDat) <- c("Input_FID", "x", "y", "InterpCOD")
-      InterpCOD = aggregate(InterpCOD~Input_FID, InterpCODdat)
+      InterpCOD = aggregate(InterpCOD~Input_FID, InterpCODDat, max)
       CombDat = merge(CombDat, InterpCOD, by="Input_FID", all.x=T)
     } else {
       CombDat$InterpCOD = rep(NA, nrow(CombDat))
