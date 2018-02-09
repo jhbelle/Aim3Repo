@@ -20,9 +20,9 @@ EndDate = as.Date("2005-12-31", "%Y-%m-%d")
 SeqDates = seq(StartDate, EndDate, by="day")
 
 # Location Combined Files
-LocComb = "/terra/CombinedValues_Jess_GA_Aqua/"
+LocComb = "/terra/CombinedValues_Jess_GA_Terra/"
 
-TAflag = "A"
+TAflag = "T"
 
 XYpoints = read.csv("/terra/Data/FinGrid/XYpoints_MAIACgrid.csv")[,c("FID", "POINT_X", "POINT_Y")]
 
@@ -30,14 +30,14 @@ DailyMeans = read.csv("/terra/Data/DailyMeans.csv")[,c("Date.Local", "DailyMean"
 DailyMeans$Date.Local = as.Date(DailyMeans$Date.Local, "%Y-%m-%d")
 
 # Read in model definitions
-AODmod = readRDS("/terra/Data/AODmodAqua.rds")
-Cloudmod = readRDS("/terra/Data/CloudmodAqua.rds")
-Harvardmod = readRDS("/terra/Data/HarvmodAqua.rds")
+AODmod = readRDS("/terra/Data/AODmodTerra.rds")
+Cloudmod = readRDS("/terra/Data/CloudmodTerra.rds")
+Harvardmod = readRDS("/terra/Data/HarvmodTerra.rds")
 
 ResidModLoc = c("/terra/Data/")
 
 # Location to send output to
-LocOutp = "/terra/PredictedValuesGA_Aqua/"
+LocOutp = "/terra/PredictedValuesGA_Terra/"
 
 ## ----
 # Loop over days
@@ -103,7 +103,7 @@ for (day in seq_along(SeqDates)){
     PredPM = merge(PredPMAOD, PredPMCloud)
     PredPM = merge(PredPM, PredPMHarv)
     # Load residuals model
-    ResidMod = readRDS(sprintf("%sResidualmodAqua_Month%d.rds", ResidModLoc, Month))
+    ResidMod = readRDS(sprintf("%sResidualmodTerra_Month%d.rds", ResidModLoc, Month))
     PredResids = predict(ResidMod, CombDat)
     PredResids = cbind.data.frame(names(PredResids), PredResids)
     colnames(PredResids) <- c("rownames", "PredResidsAOD")
