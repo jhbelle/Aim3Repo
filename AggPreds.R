@@ -8,7 +8,7 @@
 
 # Set up time stepping
 StartDate = as.Date("2003-01-01", "%Y-%m-%d")
-EndDate = as.Date("2003-01-10", "%Y-%m-%d")
+EndDate = as.Date("2003-12-31", "%Y-%m-%d")
 SeqDates = seq(StartDate, EndDate, by="day")
 DayCount = 0
 
@@ -57,7 +57,7 @@ for (day in seq_along(SeqDates)){
 
 SumGapFill$UnGapFill = SumGapFill$UnGapFill/DayCount
 SumGapFill$CloudGapFill = SumGapFill$CloudGapFill/DayCount
-SumGapFill$NoCloudGapFill = SumGapFill$NoCloudGapFill/DayCount
+SumGapFill$NoCldGapFill = SumGapFill$NoCldGapFill/DayCount
 SumGapFill$DiffGapFill = SumGapFill$DiffGapFill/DayCount
 SumGapFill$RDiffGapFill = SumGapFill$RDiffGapFill/DayCount
 
