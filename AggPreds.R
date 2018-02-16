@@ -24,7 +24,7 @@ for (day in seq_along(SeqDates)){
   # Loop over Terra/Aqua
   for (flag in seq_along(ATflags)){
     # Read in data
-    PredVals = try(read.csv(sprintf("%sPredictedValues_%d%03d_%s.csv", ATDirs[flag], Year, DOJ, ATflag[flag])))
+    PredVals = try(read.csv(sprintf("%sPredictedValues_%d%03d_%s.csv", ATDirs[flag], Year, DOJ, ATflags[flag])))
     if (is.data.frame(PredVals)){
       PredVals$DiffGapFill = PredVals$CloudGapFill - PredVals$NoCldGapFill
       PredVals$RDiffGapFill = PredVals$DiffGapFill/PredVals$NoCldGapFill
@@ -42,14 +42,14 @@ for (day in seq_along(SeqDates)){
     RDiffGapFill = aggregate(RDiffGapFill ~ Input_FID, DaysPred, mean, na.rm=T)
     GapFill = merge(GapFill, RDiffGapFill, by="Input_FID")
     DayCount = DayCount + 1
-    if (exists("SumGapFill"){
+    if (exists("SumGapFill")){
       SumGapFillInter = merge(SumGapFill, GapFill, by="Input_FID", all=T)
       SumGapFillInter$UnGapFill = rowSums(SumGapFillInter[,c("UnGapFill.x", "UnGapFill.y")], na.rm=T)
       SumGapFillInter$CloudGapFill = rowSums(SumGapFillInter[,c("CloudGapFill.x", "CloudGapFill.y")], na.rm=T)
-      SumGapFillInter$NoCloudGapFill = rowSums(SumGapFillInter[,c("NoCloudGapFill.x", "NoCloudGapFill.y")], na.rm=T)
+      SumGapFillInter$NoCldGapFill = rowSums(SumGapFillInter[,c("NoCldGapFill.x", "NoCldGapFill.y")], na.rm=T)
       SumGapFillInter$DiffGapFill = rowSums(SumGapFillInter[,c("DiffGapFill.x", "DiffGapFill.y")], na.rm=T)
       SumGapFillInter$RDiffGapFill = rowSums(SumGapFillInter[,c("RDiffGapFill.x", "RDiffGapFill.y")], na.rm=T)
-      SumGapFill = SumGapFillInter[,c("Input_FID", "UnGapFill", "CloudGapFill", "NoCloudGapFill", "DiffGapFill", "RDiffGapFill")]
+      SumGapFill = SumGapFillInter[,c("Input_FID", "UnGapFill", "CloudGapFill", "NoCldGapFill", "DiffGapFill", "RDiffGapFill")]
     } else SumGapFill = GapFill
   }
   rm(DaysPred)
