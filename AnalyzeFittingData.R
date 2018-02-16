@@ -61,13 +61,13 @@ for (i in seq(1,10)){
   ResidualsAOD = cbind.data.frame(ResidualsAOD, Rowname)
   FitGAM = merge(FittingDat, ResidualsAOD, by.x="rownames", by.y="Rowname")
   #Cloud = lmer(Arithmetic.Mean ~ PM25 + InterpCOD + CE + TempCCent + var153 + RHdayCent + WindSpeedCent + ElevCent + PImperv + RatioXYZSulfCent + PBLdayCent + FireCount + IndicatorPM + DistRds + (1+TempCCent+RHdayCent+WindSpeedCent+PBLdayCent+RatioXYZSulfCent|Date.Local), FittingDat[FittingDat$CrossValSet != i,])
-  Cloud = gam(sqrtPM ~ PM25 + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(DailyMean, Input_FID) + s(InterpCOD) + CE + s(TempCCent) + s(var153) + s(PM25) + s(SWRadCent) + s(LWRadCent) + s(ElevCent) + s(PImperv) + s(PBLdayCent) + s(FireCount) + IndicatorPM + DistRds + s(TempCCent, RHdayCent) + s(InterpCOD, CE) + s(var153, WindSpeedCent) + s(PM25,SWRadCent) + s(PM25,LWRadCent), data=FittingDat[FittingDat$CrossValSet != i,])
+  Cloud = gam(sqrtPM~DailyMean + CE + InterpCOD + LocRdLenCent + PImperv + DistRds + IndicatorPM + PForst + var153 + ElevCent + TempCCent + RHdayCent + WindSpeedCent + PBLdayCent + PM25 + SWRadCent + LWRadCent + DistRds*IndicatorPM + s(TempCCent, RHdayCent, bs="tp") + s(TempCCent, PBLdayCent, bs="tp") + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent, bs="re") + s(CE, InterpCOD, bs="re") + s(PM25, SWRadCent) + s(PM25, LWRadCent) + s(var153, PForst), data=FittingDat[FittingDat$CrossValSet != i,])
   PredCloud = predict(Cloud, FittingDat[FittingDat$CrossValSet==i,], allow.new.levels=T)
   ResidualsCloud = resid(Cloud)
   Rowname = as.numeric(names(ResidualsCloud))
   ResidualsCloud = cbind.data.frame(ResidualsCloud, Rowname)
   FitGAM2 = merge(FittingDat, ResidualsCloud, by.x="rownames", by.y="Rowname")
-  harv = gam(sqrtPM~DailyMean + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re"), data=FittingDat[FittingDat$CrossValSet!=i,])
+  harv = gam(sqrtPM~DailyMean + LocRdLenCent + PImperv + DistRds + IndicatorPM + ElevCent + DistRds*IndicatorPM + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent), data=FittingDat[FittingDat$CrossValSet!=i,])
   harvpred = predict(harv, FittingDat[FittingDat$CrossValSet==i,])
   if (exists("HarvardGap")){ HarvardGap = c(HarvardGap, harvpred)} else HarvardGap = harvpred
   for (month in seq(1,12)){
@@ -126,9 +126,9 @@ rm(Pred, Resids, CloudGap, HarvardGap, Resids2)
 
 library(ggplot2, lib.loc = "H://R/")
 
-ggplot(CombDat, aes(x=Arithmetic.Mean, y=CombinedCloud)) + geom_bin2d(bins=50) + ylim(0,75) + xlim(0,75) + geom_abline(aes(intercept=0, slope=1), linetype=3) + geom_text(aes(x=10, y=60, label="y = -0.08 + 1.02 \n R^2=0.72")) + xlab("Ground measurement") + ylab("Predicted PM2.5 from cloud gap-filled model") + theme_classic()
+ggplot(CombDat, aes(x=Arithmetic.Mean, y=CombinedCloud2)) + geom_bin2d(bins=50) + ylim(0,75) + xlim(0,75) + geom_abline(aes(intercept=0, slope=1), linetype=3) + geom_text(aes(x=10, y=60, label="y = -0.02 + 1.01 \n R^2=0.74")) + xlab("Ground measurement") + ylab("Predicted PM2.5 from cloud gap-filled model") + theme_classic()
 
-ggplot(CombDat, aes(x=Arithmetic.Mean, y=CombinedHarvard)) + geom_bin2d(bins=50) + ylim(0,75) + xlim(0,75) + geom_abline(aes(intercept=0, slope=1), linetype=3) + geom_text(aes(x=10, y=60, label="y = 0.02 + 1.01 \n R^2=0.69")) + xlab("Ground measurement") + ylab("Predicted PM2.5 from Harvard gap-filled model") + theme_classic()
+ggplot(CombDat, aes(x=Arithmetic.Mean, y=CombinedHarvard)) + geom_bin2d(bins=50) + ylim(0,75) + xlim(0,75) + geom_abline(aes(intercept=0, slope=1), linetype=3) + geom_text(aes(x=10, y=60, label="y = -0.07 + 1.02 \n R^2=0.70")) + xlab("Ground measurement") + ylab("Predicted PM2.5 from Harvard gap-filled model") + theme_classic()
 
 # ----
 # Export model definitions
@@ -138,12 +138,12 @@ mod = lmer(Arithmetic.Mean ~ AOD55 + RatioXYZSulfCent + TempCCent + RHdayCent + 
 summary(mod)
 #confint(mod)
 saveRDS(mod, "T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/AODmodTerra.rds")
-
-Cloud = gam(sqrtPM ~ PM25 + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(DailyMean, Input_FID) + s(InterpCOD) + CE + s(TempCCent) + s(var153) + s(PM25) + s(SWRadCent) + s(LWRadCent) + s(ElevCent) + s(PImperv) + s(PBLdayCent) + s(FireCount) + IndicatorPM + DistRds + s(TempCCent, RHdayCent) + s(InterpCOD, CE) + s(var153, WindSpeedCent) + s(PM25,SWRadCent) + s(PM25,LWRadCent), data=FittingDat)
+)
+Cloud = gam(sqrtPM~DailyMean + CE + InterpCOD + LocRdLenCent + PImperv + DistRds + IndicatorPM + PForst + var153 + ElevCent + TempCCent + RHdayCent + WindSpeedCent + PBLdayCent + PM25 + SWRadCent + LWRadCent + DistRds*IndicatorPM + s(TempCCent, RHdayCent, bs="tp") + s(TempCCent, PBLdayCent, bs="tp") + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent, bs="re") + s(CE, InterpCOD, bs="re") + s(PM25, SWRadCent) + s(PM25, LWRadCent) + s(var153, PForst), data=FittingDat)
 summary(Cloud)
 saveRDS(Cloud, "T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/CloudmodTerra.rds")
 
-Harvard = gam(sqrtPM~DailyMean + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re"), data=FittingDat)
+Harvard = gam(sqrtPM~DailyMean + LocRdLenCent + PImperv + DistRds + IndicatorPM + ElevCent + DistRds*IndicatorPM + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent), data=FittingDat)
 summary(Harvard)
 saveRDS(Harvard, "T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/HarvmodTerra.rds")
 
