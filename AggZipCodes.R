@@ -16,8 +16,12 @@ ATflags = c("A", "T")
 ATDirs = c("/terra/PredictedValuesGA_Aqua/", "/terra/PredictedValuesGA_Terra")
 
 # MAIAC input_fid to zip code file
+InputFID_to_ZCTA <- read.csv("T://eohprojs/SCAPE/Project 3/Analysis/Georgia Satellite ED visits/Jess dissertation/2010ZipCodes/InputFID_to_ZCTA.csv", stringsAsFactors = F)[,c("FID", "ZCTA5CE10")]
+colnames(InputFID_to_ZCTA) <- c("Input_FID", "ZipCode")
+InputFID_to_ZCTA <- subset(InputFID_to_ZCTA, !is.na(InputFID_to_ZCTA$ZipCode))
 
 # Output location
+OutpLoc = "/terra/AggregatedValuesGA/"
 
 # Loop over time
 for (day in seq_along(SeqDates)){
@@ -28,7 +32,7 @@ for (day in seq_along(SeqDates)){
   for (flag in seq_along(ATflags)){
     PredVals = try(read.csv(sprintf("%sPredictedValues_%d%03d_%s.csv", ATDirs[flag], Year, DOJ, ATflags[flag])))
     if (is.data.frame(PredVals)){
-      PredVals = merge()
+      PredVals = merge(PredVals, InputFID_to_ZCTA, by="Input_FID")
       if (exists("DaysPred")){ DaysPred=rbind.data.frame(DaysPred, PredVals)} else DaysPred=PredVals
     }
   }
@@ -46,7 +50,7 @@ for (day in seq_along(SeqDates)){
     GapFill = merge(GapFill, RH, by="ZipCode")
     IndicatorFire = aggregate(IndicatorFire ~ ZipCode, DaysPred, max, na.rm=T)
     GapFill = merge(GapFill, IndicatorFire, by="ZipCode")
-    write.csv(GapFill, sprintf("%s"))
+    write.csv(GapFill, sprintf("%sAggregatedPredictions_%d%03d.csv", OutpLoc, Year, DOJ))
   }
   rm(DaysPred)
 }
