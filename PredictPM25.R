@@ -15,7 +15,7 @@ library(lme4)
 ## ----
 
 # Time stepping
-StartDate = as.Date("2003-01-01", "%Y-%m-%d")
+StartDate = as.Date("2005-08-11", "%Y-%m-%d")
 EndDate = as.Date("2005-12-31", "%Y-%m-%d")
 SeqDates = seq(StartDate, EndDate, by="day")
 
