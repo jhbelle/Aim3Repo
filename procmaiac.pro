@@ -1,5 +1,5 @@
 pro procMaiac, FinGridJoined, yrint, startday, endday, fileloc, outloc, maiacString, LocTAFlag, LocTStamp
-  ; Takes as input the bounding coordinates for the study area, the year and days of interest, and the file input and output locations
+  ; Takes as input a file containing the columns and rows or indexes of maiac values from the tile that are inside the study area as extracted from the lat/lon files, the year and days of interest, and the file input and output locations, a string of maiac data to look for and the locations of the TA flag and time stamp in the filepath string 
   ; Produces a csv for each day containing all maiac data within the bounding box
   ; Open FinGridJoined with information needed later
   Dat = READ_CSV(FinGridJoined, HEADER=DatHead)
