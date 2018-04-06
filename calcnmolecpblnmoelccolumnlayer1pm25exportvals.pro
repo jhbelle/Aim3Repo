@@ -6,10 +6,10 @@ pro CalcNMolecPBLNMoelcColumnLayer1PM25ExportVals
 ; This is done for each time step in the years 2003, 2004, and 2005,
 ; and for the region: [[37.6, -88.2, -78.2, 27.8].
 
-FOR tau = 183086.00, 184078.00, 2 DO BEGIN
+FOR tau = 186002.00, 192840.00, 2 DO BEGIN
   Date = TAU2YYMMDD(tau)
   IF (Date.HOUR LT 21) AND (Date.HOUR GT 12) THEN BEGIN
-    Filename = '/gc_runs/merra2_2x25_soa_Jess/ts' + STRING(Date.YEAR, FORMAT='(I4)') + STRING(Date.MONTH, FORMAT='(I02)') + STRING(Date.DAY, FORMAT='(I02)') + '.bpch'  
+    Filename = '/terra/2006/ts' + STRING(Date.YEAR, FORMAT='(I4)') + STRING(Date.MONTH, FORMAT='(I02)') + STRING(Date.DAY, FORMAT='(I02)') + '.bpch'  
   
 ; ------------
 ; Calculate number of sulfate molecules in column

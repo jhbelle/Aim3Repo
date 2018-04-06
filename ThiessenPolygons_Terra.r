@@ -22,22 +22,22 @@ library(plyr)
 #Startday = as.numeric(args[2])
 #Ndays = as.numeric(args[3])
 Section = 1
-Startday=176
+Startday=189
 Ndays=365
-AT="A"
+AT="T"
 #Section = 8 #Ndays =365
 #Startday=1 ## Year to grid
 data.year = 2007
 ## Location of grid polygon layer
-MAIACGrid = "/terra/Data/FinGrid/H04v05.shp"
-MAIAClayer = "H04v05"
+MAIACGrid = "/terra/Data/FinGrid/H04v04.shp"
+MAIAClayer = "H04v04"
 ## Folder containing section-specific csv files with raw data in them -  GriddingExtractMODIS10km.m needs to be run first to pull the raw data from the hdf into section-specific csvs
-aquaDir <-  "/aura/Jess_MOYD06_MOYD03_Georgia/MYD06_Extr/2007/"
+aquaDir <-  "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2007/"
 ## Directory to put output in
-OutDir <- "/gc_runs/Gridded_GA_MYD06_5km/"
+OutDir <- "/gc_runs/Gridded_GA_MOD06_5km/"
 ## Directory with GeoMetadata files downloaded from NASA ftp site
-GeoMetaDir <- "/gc_runs/MODIS_GeoMeta/AQUA/2007/"
-GeoMetaPrefix <- "MYD03_"
+GeoMetaDir <- "/gc_runs/MODIS_GeoMeta/TERRA/2007/"
+GeoMetaPrefix <- "MOD03_"
 ## ---------------
 # Load function file
 ## ---------------
@@ -118,15 +118,15 @@ for(day in Startday:Ndays){
       }
      rm(MODsub)
     }
-  }
-  ## If there was data for that section for that day, output daily csv containing pixel UIDs for each grid polygon in section - To get summarized data for each grid section, run the script LinkMODdat_Grid.r. Since the act of gridding is time consuming, this was done to make it possible to quickly go back and summarize the gridded data in different ways for different purposes.
-  if (exists("Outlist")){
-    US.id <- US.grid@data$Input_FID
-    PixelUIDs <- as.character(Outlist)
-    modis.dat <- cbind.data.frame(US.id, PixelUIDs)
-    write.csv(modis.dat,file=sprintf("%sOutp_%i_%03d_S%i_%s.csv", OutDir, data.year, day, 2, AT))
-  }
-  rm(modis.dat, Outlist, PixelUIDs)
-  gc()
+    ## If there was data for that section for that day, output daily csv containing pixel UIDs for each grid polygon in section - To get summarized data for each grid section, run the script LinkMODdat_Grid.r. Since the act of gridding is time consuming, this was done to make it possible to quickly go back and summarize the gridded data in different ways for different purposes.
+    if (exists("Outlist")){
+      US.id <- US.grid@data$Input_FID
+      PixelUIDs <- as.character(Outlist)
+      modis.dat <- cbind.data.frame(US.id, PixelUIDs)
+      write.csv(modis.dat,file=sprintf("%sOutp_%i_%03d_S%i_%s.csv", OutDir, data.year, day, Section, AT))
+    }
+    rm(modis.dat, Outlist, PixelUIDs)
+    gc()
+  }	
 }
 

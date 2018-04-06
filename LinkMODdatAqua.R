@@ -21,14 +21,14 @@ Endday=365
 Startday=4
 ## Year
 Year = 2006
-TAflag="T"
+TAflag="A"
 ListBroken = c()
 ## Location of MODIS files - extracted from hdf section-specific csvs using GriddingExtractMODIS10km.m
-MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2006/"
+MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MYD06_Extr/2006/"
 ## Location of grid
-GridPath = "/gc_runs/Gridded_GA_MOD06_5km/"
+GridPath = "/gc_runs/Gridded_GA_MYD06_5km/"
 ## Location of output files
-OutPath = "/terra/Linked_GA_MOD06_5k/"
+OutPath = "/terra/Linked_GA_MYD06_5k/"
 ## Scale value for AOD - from MODIS hdf files
 Emisscale = 0.009999999776482582
 # --------
