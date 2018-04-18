@@ -18,17 +18,17 @@ source("/home/jhbelle/Aim3Repo/Functions_LinkMODdat_Grid.r")
 #Endday = as.numeric(args[2])
 #Startday = as.numeric(args[1])
 Endday=365
-Startday=220
+Startday=354
 ## Year
-Year = 2008
-TAflag="A"
+Year = 2009
+TAflag="T"
 ListBroken = c()
 ## Location of MODIS files - extracted from hdf section-specific csvs using GriddingExtractMODIS10km.m
-MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MYD06_Extr/2008/"
+MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2009/"
 ## Location of grid
-GridPath = "/gc_runs/Gridded_GA_MYD06_5km/"
+GridPath = "/gc_runs/Gridded_GA_MOD06_5km/"
 ## Location of output files
-OutPath = "/terra/Linked_GA_MYD06_5k/"
+OutPath = "/terra/Linked_GA_MOD06_5k/"
 ## Scale value for AOD - from MODIS hdf files
 Emisscale = 0.009999999776482582
 # --------
@@ -44,7 +44,7 @@ for (Day in Startday:Endday){
       Mod$UID <- sprintf("G%i_%03d_%s_P%f_%f", Year, Day, Mod$timestamp, Mod$Lat, Mod$Long)
       Mod$UID <- gsub("[[:punct:]]", "", Mod$UID)
       ## If the gridding output file exists (a few days/sections had no data and files for those days weren't created during gridding), read it in
-      Grid <- try(read.csv(sprintf("%sOutp_%i_%03d_S%i_A.csv", GridPath, Year, Day, section), stringsAsFactors=FALSE))
+      Grid <- try(read.csv(sprintf("%sOutp_%i_%03d_S%i_T.csv", GridPath, Year, Day, section), stringsAsFactors=FALSE))
       if (is.data.frame(Grid)) {
         ## Summarize MODIS data in each cell of the CMAQ grid - function CalcVals defined in function file
         CombOut <- ddply(Grid, .(US.id), CalcVals, MODdat=Mod, scale=Emisscale)
