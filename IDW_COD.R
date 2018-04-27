@@ -18,7 +18,7 @@ source("/home/jhbelle/Aim3Repo/Functions_IDW.R")
 # ------
 
 # Location of 1 km extracted MODIS swath values
-SwathLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD03_Extr/"
+SwathLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/MYD03_Extr/"
 
 # MAIAC grid values
 MAIACgrid = read.csv("/terra/Data/FinGrid/XYpoints_MAIACgrid.csv")[,c("FID", "POINT_X", "POINT_Y")]
@@ -38,7 +38,7 @@ SeqDays = seq(Startday, Endday, by="day")
 Scale = 0.009999999776482582
 
 # Output location
-OutLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Terra/"
+OutLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Aqua/"
 
 # ------
 # For each day and time stamp, interpolate values

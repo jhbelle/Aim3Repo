@@ -18,8 +18,8 @@ source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
 # ------
 
 # Loop start/end dates
-Startdate = as.Date("2008-03-09", "%Y-%m-%d")
-Enddate = as.Date("2008-12-31", "%Y-%m-%d")
+Startdate = as.Date("2009-12-13", "%Y-%m-%d")
+Enddate = as.Date("2009-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)

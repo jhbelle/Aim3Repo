@@ -20,7 +20,7 @@ Endday = 365
 Year = 2009
 
 # Location of Combined files
-CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
+CombLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
 
 RH = nc_open("/terra/Data/rhum.2m.2009.nc")
 RH2 = ncvar_get(RH, "rhum")
@@ -45,7 +45,7 @@ MAIACtoNARR$lon = round(MAIACtoNARR$lon, digits=5)
 
 for (i in Startday:Endday){
   # Read combined file
-  CombFile = sprintf("%sCombMAIACCloudNLDASGC_Text_%d%03d_T.csv", CombLoc, Year, i)
+  CombFile = sprintf("%sCombMAIACCloudNLDASGC_Text_%d%03d_A.csv", CombLoc, Year, i)
   CombDat = try(read.csv(CombFile, stringsAsFactors = F))
   if (is.data.frame(CombDat)){
     # Pull timestamp of overpass and get matching timestamp for NARR

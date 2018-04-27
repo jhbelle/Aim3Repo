@@ -13,7 +13,7 @@
 ## ----
 
 # TA flag
-TAflag = "T"
+TAflag = "A"
 
 # Time 
 Startdate = as.Date("2006-01-01", "%Y-%m-%d")
@@ -21,10 +21,10 @@ Enddate = as.Date("2009-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, by="day")
 
 # Location of Combined files
-CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
+CombLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
 
 # Location of interpolated COD files
-InterpCODLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Terra/"
+InterpCODLoc = "/aura/Jess_MOYD06_MOYD03_Georgia/InterpCOD_Aqua/"
 
 ## ----
 # Loop over days
