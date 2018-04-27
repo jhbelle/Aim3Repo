@@ -22,21 +22,21 @@ library(plyr)
 #Startday = as.numeric(args[2])
 #Ndays = as.numeric(args[3])
 Section = 1
-Startday=189
+Startday=354
 Ndays=365
 AT="T"
 #Section = 8 #Ndays =365
 #Startday=1 ## Year to grid
-data.year = 2007
+data.year = 2009
 ## Location of grid polygon layer
 MAIACGrid = "/terra/Data/FinGrid/H04v05.shp"
 MAIAClayer = "H04v05"
 ## Folder containing section-specific csv files with raw data in them -  GriddingExtractMODIS10km.m needs to be run first to pull the raw data from the hdf into section-specific csvs
-aquaDir <-  "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2007/"
+aquaDir <-  "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2009/"
 ## Directory to put output in
 OutDir <- "/gc_runs/Gridded_GA_MOD06_5km/"
 ## Directory with GeoMetadata files downloaded from NASA ftp site
-GeoMetaDir <- "/gc_runs/MODIS_GeoMeta/TERRA/2007/"
+GeoMetaDir <- "/gc_runs/MODIS_GeoMeta/TERRA/2009/"
 GeoMetaPrefix <- "MOD03_"
 ## ---------------
 # Load function file

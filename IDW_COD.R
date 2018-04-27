@@ -30,8 +30,8 @@ MAIACproj = "+proj=eqdc +lat_0=0 +lon_0=0 +lat_1=33 +lat_2=45 +x_0=0 +y_0=0 +ell
 SwathProj = "+proj=longlat +datum=WGS84"
 
 # Set up time steps
-Startday = as.Date("2003-01-01", "%Y-%m-%d")
-Endday = as.Date("2005-12-31", "%Y-%m-%d")
+Startday = as.Date("2006-01-01", "%Y-%m-%d")
+Endday = as.Date("2009-12-31", "%Y-%m-%d")
 SeqDays = seq(Startday, Endday, by="day")
 
 # COD scale factor 

@@ -18,13 +18,13 @@ source("/home/jhbelle/Aim3Repo/Functions_LinkMODdat_Grid.r")
 #Endday = as.numeric(args[2])
 #Startday = as.numeric(args[1])
 Endday=365
-Startday=4
+Startday=364
 ## Year
-Year = 2006
+Year = 2008
 TAflag="T"
 ListBroken = c()
 ## Location of MODIS files - extracted from hdf section-specific csvs using GriddingExtractMODIS10km.m
-MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2006/"
+MODpath = "/aura/Jess_MOYD06_MOYD03_Georgia/MOD06_Extr/2008/"
 ## Location of grid
 GridPath = "/gc_runs/Gridded_GA_MOD06_5km/"
 ## Location of output files
@@ -44,7 +44,7 @@ for (Day in Startday:Endday){
       Mod$UID <- sprintf("G%i_%03d_%s_P%f_%f", Year, Day, Mod$timestamp, Mod$Lat, Mod$Long)
       Mod$UID <- gsub("[[:punct:]]", "", Mod$UID)
       ## If the gridding output file exists (a few days/sections had no data and files for those days weren't created during gridding), read it in
-      Grid <- try(read.csv(sprintf("%sOutp_%i_%03d_S%i_A.csv", GridPath, Year, Day, section), stringsAsFactors=FALSE))
+      Grid <- try(read.csv(sprintf("%sOutp_%i_%03d_S%i_T.csv", GridPath, Year, Day, section), stringsAsFactors=FALSE))
       if (is.data.frame(Grid)) {
         ## Summarize MODIS data in each cell of the CMAQ grid - function CalcVals defined in function file
         CombOut <- ddply(Grid, .(US.id), CalcVals, MODdat=Mod, scale=Emisscale)

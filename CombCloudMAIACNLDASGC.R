@@ -18,8 +18,8 @@ source("/home/jhbelle/Aim3Repo/Functions_ProcNLDAS.R")
 # ------
 
 # Loop start/end dates
-Startdate = as.Date("2005-12-18", "%Y-%m-%d")
-Enddate = as.Date("2005-12-31", "%Y-%m-%d")
+Startdate = as.Date("2008-03-09", "%Y-%m-%d")
+Enddate = as.Date("2008-12-31", "%Y-%m-%d")
 SeqDates = seq(Startdate, Enddate, "days")
 
 # Tiles (maiac)/Section (Cloud)
@@ -148,6 +148,7 @@ for (day in seq_along(SeqDates)){
       varval$Long = as.numeric(as.character(varval$Long))
       MAIACCloud <- merge(MAIACCloud, varval, by.x=c("NLDASLon", "NLDASLat"), by.y=c("Long", "Lat"), all.x=T)
     }
+    # ForB file
     NLDASForB = nc_open(sprintf("%s/NLDAS_FORB0125_H.002/%d/NLDAS_FORB0125_H.A%d%02d%02d.%02d00.002.nc", NLDASloc, year, year, as.numeric(as.character(date, "%m")), as.numeric(as.character(date, "%d")), NearestHour))
     Lat = ncvar_get(NLDASForB, "lat")
     Lon = ncvar_get(NLDASForB, "lon")
