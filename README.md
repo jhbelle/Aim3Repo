@@ -54,21 +54,21 @@ II. Exposure modeling
 	a. Process EPA data
 		1) ProcEPA.R - Processes the EPA data to a file containing all observations in study area and an additional file unique monitor locations - script run locally
 	b. Create fitting dataset from combined files and EPA data
-		1) CreateFittingData.R
-		2) Functions_CreateFittingData.R
-		3) qsub_CreateFittingData.sh
+		1) CreateFittingData.R - Creates fitting dataset from combined files and EPA data
+		2) Functions_CreateFittingData.R - Function file called by CreateFittingData.R
+		3) qsub_CreateFittingData.sh - Bash submission script for CreateFittingData.R
 	c. Analyze fitting dataset, calculate R2 values, and settle on a final model
 		1) AnalyzeFittingData.R - script run locally
 	d. Predict new values
-		1) PredictPM25.R, PredictPM25_Terra.R - 
-		2) qsub_PredictPM25.sh, qsub_PredictPM25_Terra.sh
+		1) PredictPM25.R, PredictPM25_Terra.R - Predict new values for Aqua and Terra, respectively 
+		2) qsub_PredictPM25.sh, qsub_PredictPM25_Terra.sh - bash submission scripts for PredictPM25.R and PredictPM25_Terra.R
 	e. Aggregate predictions to ZIP codes
-		1) AggZipCodes.R
-		2) qsub_AggZipCodes.sh
+		1) AggZipCodes.R - Aggregates predicted PM2.5 values to the ZIP code 
+		2) qsub_AggZipCodes.sh - Bash submission script for AggZipCodes.R
 	f. Create exposure dataset for use in health modeling
-		1) CreateExposureData.R
+		1) CreateExposureData.R - Creates exposure dataset for health modeling from PM2.5 predictions output by PredictPM25.R or PredictPM25_Terra.R. Run locally
 
-III. Health modeling
+III. Health modeling - all three sas files are identical
 	a. Asthma/Wheeze
 		1) Jess_ProcHealthData_AQ.sas
 	b. Otitis media
