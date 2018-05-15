@@ -29,10 +29,10 @@ EPAdat <- merge(EPAdat, EPAtoMAIAC, by.x=c("State.Code", "County.Code", "Site.Nu
 # Create fitting data
 # ----
 
-FittingData = ddply(EPAdat, .(Date.Local), GetOtherVars, ATflag="T")
+FittingData = ddply(EPAdat, .(Date.Local), GetOtherVars, ATflag="A")
 
 # ----
 # Write fitting dataset
 # ----
 
-write.csv(FittingData, "/terra/Data/FittingData_GA_Terra.csv")
+write.csv(FittingData, "/terra/Data/FittingData_GA_Aqua.csv")

@@ -11,10 +11,10 @@ EndDate = as.Date("2009-12-31", "%Y-%m-%d")
 SeqDates = seq(StartDate, EndDate, by="day")
 
 # Terra/Aqua flag
-TAflag = "T"
+TAflag = "A"
 
 # Location of combined files
-CombLoc = "/terra/CombinedValues_Jess_GA_Terra/"
+CombLoc = "/terra/CombinedValues_Jess_GA_Aqua/"
 
 # Visibility data location
 VisLoc = "/terra/InterpolatedVisibility/"
