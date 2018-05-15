@@ -52,10 +52,18 @@ USFRM2004 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchive
 GAFRM2004 = SiteSort(USFRM2004, GAbox)
 USFRM2005 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchives/EPA_GroundMonitors/PM25_FRM/daily_88101_2005.csv", stringsAsFactors=F)[,c("State.Code", "County.Code", "Site.Num", "POC", "Latitude", "Longitude", "Sample.Duration", "Date.Local", "Arithmetic.Mean")]
 GAFRM2005 = SiteSort(USFRM2005, GAbox)
-rm(USFRM2003, USFRM2004, USFRM2005)
+USFRM2006 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchives/EPA_GroundMonitors/PM25_FRM/daily_88101_2006.csv", stringsAsFactors=F)[,c("State.Code", "County.Code", "Site.Num", "POC", "Latitude", "Longitude", "Sample.Duration", "Date.Local", "Arithmetic.Mean")]
+GAFRM2006 = SiteSort(USFRM2006, GAbox)
+USFRM2007 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchives/EPA_GroundMonitors/PM25_FRM/daily_88101_2007.csv", stringsAsFactors=F)[,c("State.Code", "County.Code", "Site.Num", "POC", "Latitude", "Longitude", "Sample.Duration", "Date.Local", "Arithmetic.Mean")]
+GAFRM2007 = SiteSort(USFRM2007, GAbox)
+USFRM2008 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchives/EPA_GroundMonitors/PM25_FRM/daily_88101_2008.csv", stringsAsFactors=F)[,c("State.Code", "County.Code", "Site.Num", "POC", "Latitude", "Longitude", "Sample.Duration", "Date.Local", "Arithmetic.Mean")]
+GAFRM2008 = SiteSort(USFRM2008, GAbox)
+USFRM2009 = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/EPAarchives/EPA_GroundMonitors/PM25_FRM/daily_88101_2009.csv", stringsAsFactors=F)[,c("State.Code", "County.Code", "Site.Num", "POC", "Latitude", "Longitude", "Sample.Duration", "Date.Local", "Arithmetic.Mean")]
+GAFRM2009 = SiteSort(USFRM2009, GAbox)
+rm(USFRM2003, USFRM2004, USFRM2005, USFRM2006, USFRM2007, USFRM2008, USFRM2009)
 
 # Stack up 2003, 2004, and 2005
-GAFRM = rbind.data.frame(GAFRM2003, GAFRM2004, GAFRM2005)
+GAFRM = rbind.data.frame(GAFRM2003, GAFRM2004, GAFRM2005, GAFRM2006, GAFRM2007, GAFRM2008, GAFRM2009)
 # Write file containing all EPA observations within study area
 write.csv(GAFRM, "T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/GAFRM_EPAobs.csv", row.names = F)
 
