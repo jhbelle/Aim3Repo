@@ -8,13 +8,12 @@
 
 # Load libraries
 library(lme4)
-library(piecewiseSEM)
-library(MuMIn)
 library(mgcv)
-library(randomForest)
+
 
 # Read in fitting dataset
-FittingDat <- read.csv("T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/FittingData_GA_Aqua.csv", stringsAsFactors = F)
+#FittingDat <- read.csv("T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/FittingData_GA_Aqua.csv", stringsAsFactors = F)
+FittingDat <- read.csv("/terra/Data/FittingData_GA_Aqua.csv", stringsAsFactors = F)
 #FittingDat <- read.csv("T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/FittingData_GA_Terra.csv", stringsAsFactors = F)
 
 # Clean up
@@ -26,7 +25,7 @@ FittingDat$IndicatorFire = ifelse(FittingDat$FireCount > 0, 1, 0)
 FittingDat$CatPMEmiss = cut(FittingDat$Count_, c(0,750, 2000))
 FittingDat$IndicatorPM = ifelse(FittingDat$Count_ > 0, 1, 0)
 FittingDat = subset(FittingDat, FittingDat$Arithmetic.Mean > 2)
-XYpoints = read.csv("T:/eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_StudyDefs/FinGrid/XYpoints_MAIACgrid.csv")[,c("FID", "POINT_X", "POINT_Y")]
+XYpoints = read.csv("/terra/Data/FinGrid/XYpoints_MAIACgrid.csv")[,c("FID", "POINT_X", "POINT_Y")]
 FittingDat = merge(FittingDat, XYpoints, by.x="Input_FID", by.y="FID")
 FittingDat$CrossValSet = sample(1:10, length(FittingDat$Input_FID), replace=T)
 FittingDat$Date.Local=as.Date(FittingDat$Date.Local, "%Y-%m-%d")
@@ -67,17 +66,18 @@ for (i in seq(1,10)){
   FitGAM = merge(FittingDat, ResidualsAOD, by.x="rownames", by.y="Rowname")
   #Cloud = lmer(Arithmetic.Mean ~ PM25 + InterpCOD + CE + TempCCent + var153 + RHdayCent + WindSpeedCent + ElevCent + PImperv + RatioXYZSulfCent + PBLdayCent + FireCount + IndicatorPM + DistRds + (1+TempCCent+RHdayCent+WindSpeedCent+PBLdayCent+RatioXYZSulfCent|Date.Local), FittingDat[FittingDat$CrossValSet != i,])
   Cloud = gam(sqrtPM~DailyMean + CE + InterpCOD + LocRdLenCent + PImperv + DistRds + IndicatorPM + PForst + var153 + ElevCent + TempCCent + RHdayCent + WindSpeedCent + PBLdayCent + PM25 + VisCent + DistRds*IndicatorPM + s(TempCCent, RHdayCent, bs="tp") + s(TempCCent, PBLdayCent, bs="tp") + s(POINT_XCent, POINT_YCent, bs="tp", k=15) + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent, bs="re") + s(CE, InterpCOD, bs="re") + s(PM25, VisCent) + s(var153, PForst) + s(VisCent), data=FittingDat[FittingDat$CrossValSet != i,])
-  PredCloud = predict(Cloud, FittingDat[FittingDat$CrossValSet==i,], allow.new.levels=T)
+  PredCloud = predict(Cloud, FittingDat[FittingDat$CrossValSet==i,])
   ResidualsCloud = resid(Cloud)
   Rowname = as.numeric(names(ResidualsCloud))
   ResidualsCloud = cbind.data.frame(ResidualsCloud, Rowname)
   FitGAM2 = merge(FittingDat, ResidualsCloud, by.x="rownames", by.y="Rowname")
   #harv = gam(sqrtPM~DailyMean + LocRdLenCent + PImperv + DistRds + IndicatorPM + ElevCent + DistRds*IndicatorPM + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent), data=FittingDat[FittingDat$CrossValSet!=i,])
-  harv = gamm(sqrtPM~DailyMean + LocRdLenCent + DistRds + ElevCent + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re"), data=FittingDat[FittingDat$CrossValSet!=i,], random=list(Year=~1, Month=~1))
-  harvpred = predict(harv, FittingDat[FittingDat$CrossValSet==i,], allow.new.levels=T)
+  #harv = gamm(sqrtPM~DailyMean + LocRdLenCent + DistRds + ElevCent + s(POINT_XCent, POINT_YCent, bs="tp") + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re"), data=FittingDat[FittingDat$CrossValSet!=i,], random=list(Year=~1, Season=~1))
+ # harvpred = predict(harv$lme, FittingDat[FittingDat$CrossValSet==i,], level=0, type="response")
   if (exists("HarvardGap")){ HarvardGap = c(HarvardGap, harvpred)} else HarvardGap = harvpred
+  for (year in seq(200
   for (month in seq(1,12)){
-    residgam = gam(ResidualsAOD ~ s(POINT_XCent, POINT_YCent, k=25) + s(PImperv) + s(ElevCent) + s(LocRdLenCent, NEAR_DIST), data=FitGAM[FitGAM$CrossValSet != i & FitGAM$Month == month,])
+    residgam = gam(ResidualsAOD ~ s(POINT_XCent, POINT_YCent, k=25) + s(PImperv) + s(ElevCent), data=FitGAM[FitGAM$CrossValSet != i & FitGAM$Month == month,])
     predresidgam = predict(residgam, FittingDat[FittingDat$CrossValSet==i & FittingDat$Month == month,])
     if (exists("Resids")){ Resids = c(Resids, predresidgam)} else Resids = predresidgam
     #residgam2 = gam(ResidualsCloud ~ s(POINT_XCent, POINT_YCent) + s(PImperv) + s(ElevCent), data=FitGAM2[FitGAM2$CrossValSet != i & FitGAM2$Month == month,])
@@ -143,7 +143,7 @@ rm(Pred, Resids, CloudGap, HarvardGap, Resids2)
 #summary(mod)
 #confint(mod)
 #saveRDS(mod, "T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/AODmodAqua.rds")
-)
+
 #Cloud = gam(sqrtPM~DailyMean + CE + InterpCOD + LocRdLenCent + PImperv + DistRds + IndicatorPM + PForst + var153 + ElevCent + TempCCent + RHdayCent + WindSpeedCent + PBLdayCent + PM25 + VisCent + DistRds*IndicatorPM + s(TempCCent, RHdayCent, bs="tp") + s(TempCCent, PBLdayCent, bs="tp") + s(POINT_XCent, POINT_YCent, bs="tp", k=15) + s(Input_FID, bs="re") + s(Input_FID, DailyMean, bs="re") + s(ElevCent, LocRdLenCent, bs="re") + s(CE, InterpCOD, bs="re") + s(PM25, VisCent) + s(var153, PForst) + s(VisCent), data=FittingDat)
 #summary(Cloud)
 #saveRDS(Cloud, "T://eohprojs/CDC_climatechange/Jess/Dissertation/Paper3_Data/CloudmodAqua.rds")
